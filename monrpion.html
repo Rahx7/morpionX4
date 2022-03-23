@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="js.js"  defer></script>
+    <script src="css.css" rel="stylesheet" type="text/css" ></script>
+
+    <style>
+
+        /* *{
+
+            box-sizing: border-box;
+            padding: 0;margin: 0;
+        } */
+
+        body{
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .container{
+
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            align-items: center;
+            position: relative;
+            height: 300px;
+            width: 300px;
+            top: 56px;
+        }
+
+        .container > div {
+
+            width: 24%;
+            height:24%;
+            border: 1px dotted #000;
+        }
+
+
+    </style>
+
+</head>
+<body>
+
+    <div class="container">
+        <div id="div_1"></div>
+        <div id="div_2"></div>
+        <div id="div_3"></div>
+        <div id="div_4"></div>
+        <div id="div_5"></div>
+        <div id="div_6"></div>
+        <div id="div_7"></div>
+        <div id="div_8"></div>
+        <div id="div_9"></div>
+        <div id="div_10"></div>
+        <div id="div_11"></div>
+        <div id="div_12"></div>
+        <div id="div_13"></div>
+        <div id="div_14"></div>
+        <div id="div_15"></div>
+        <div id="div_16"></div>
+    </div>
+    
+    <script>
+        let compteur=0;
+        let tabDiv ;
+        function recupDiv(){
+
+            tabDiv = document.querySelectorAll('[id^=div_]'); // je cherche tous les element avec l'id div que je met dans un tableau
+            // tabDiv[0].classList.add
+            for (let i = 0; i < tabDiv.length; i++) {
+                const element = tabDiv[i];
+                element.addEventListener('click', maFonc); // j'ajoute un listener a chaque div de mon tableau qui appel maFonc()
+                
+            }
+
+        }
+
+
+        function maFonc(e){  // je recupere l'event e pour recuperer e.target donc l'element qui click 
+            compteur++;
+
+                if(compteur%2==0){ // si le nombre de click est paire soit rond
+                    e.target.innerHTML = '&#169;'; 
+                    e.target.classList.add('rond'); // j'ajoute une class a l'élément qui click
+                }
+                if(compteur%2==1){
+                    e.target.innerHTML = '&#935;';
+                    e.target.classList.add('croix');           
+                }
+
+                e.target.removeEventListener('click',maFonc); // j'enleve le listener de mon target
+                
+            verif();
+
+        }
+
+
+        function verif(){
+
+        //je stock mes valeur de offset des boucle for element.offsetLeft position du bloc par rapport à ma div de base 
+         let tabh2 = {};
+         let tab2 = {};
+        tab2.left = [];
+        tab2.top =[];
+        tabh2.left = [];
+        tabh2.top =[];
+         // ici mes variable pour verifier lorsque 3 sont pareil 
+         var nb = 0;
+         var nbh = 0;
+         let nbr = 0;
+         let nbhr = 0;
+
+        // je recupere les div aux class croix et rond dans 2 tableau
+            let tabDivCroix = document.querySelectorAll('.croix');
+            let tabDivRond = document.querySelectorAll('.rond');
+
+
+
+        //////////////////////// mon tableau decroix
+            for (let i = 0; i < tabDivCroix.length; i++) {
+                // const element = tabDivCroix[i]; // je met dans un element chaque div avec croix en class
+
+               let left = tabDivCroix[i].offsetLeft; // je recupere les position de tous mes element de class croix
+               let top  = tabDivCroix[i].offsetTop;    
+
+               tab2.left[i] = left; // je les inject dans un tableau
+               tab2.top[i] = top; 
+                             
+            }
+
+        //////////////////////// mon tableau de rond
+            for (let i = 0; i < tabDivRond.length; i++) {
+                // const element = tabDivRond[i];
+               let left = tabDivRond[i].offsetLeft ;
+               let top  = tabDivRond[i].offsetTop;    
+               
+               tabh2.left[i] = left;
+               tabh2.top[i] = top; 
+
+               
+            }
+
+
+
+                    if(compteur%2==1){ // si le nombre de click est impaire soit croix
+                
+                        for (let i = 0; i < tab2.left.length-1; i++) {
+                            // const element = array[i];
+                            for  (let j = i+1; j< tab2.left.length; j++){
+
+                                if(tab2.left[i] == tab2.left[j]){
+                                    nb++;
+                                }
+
+                            }                
+                        }
+
+                        
+                        for (let i = 0; i < tab2.top.length-1; i++) {
+                            // const element = array[i];
+                            for  (let j = i+1; j< tab2.top.length; j++){
+
+                                if(tab2.top[i] == tab2.top[j]){
+                                    nbh++;
+                                }
+
+                            }                
+                        }
+
+
+                        if(nbh>4 || nb>4) { 
+                            setTimeout(function (){gagne('croix')},50 )
+                            
+                         }
+                    }
+
+
+
+                    //////////////////////////////////////////////////////////////////////////les rond 
+                    if (compteur % 2 == 0) { // si le nombre de click est paire soit rond
+
+                        for (let i = 0; i < tabh2.left.length-1; i++) {
+                            // const element = array[i];
+                            for (let j = i + 1; j < tabh2.left.length; j++) {
+
+                                if (tabh2.left[i] == tabh2.left[j]) {
+                                    nbr++;
+                                }
+
+                            }
+                        }
+
+
+                        for (let i = 0; i < tabh2.top.length-1; i++) {
+                            // const element = array[i];
+                            for (let j = i + 1; j < tabh2.top.length; j++) {
+
+                                if (tabh2.top[i] == tabh2.top[j]) {
+                                    nbhr++;
+                                }
+
+                            }
+                        }
+
+                        if (nbhr > 4 || nbr > 4) {  setTimeout( function(){ gagne('rond')},50 ) }
+                    }
+            
+
+        }
+        recupDiv();
+
+
+        function gagne(e){ 
+            
+            if(e=='rond'){ prompt('Votre nom ? les rond ont gagné'); }
+            else{ prompt('Votre nom ? les croix ont gagné'); }
+
+                console.log(e);
+                nb = 0;
+                nbh = 0;
+                nbr = 0;
+                nbhr = 0; 
+                compteur=0;
+                
+                for (let i = 0; i < tabDiv.length; i++) {
+                        const element = tabDiv[i];
+                        element.innerHTML = '';
+                        element.classList.remove('rond', 'croix');
+                        element.addEventListener('click', maFonc); // j'ajoute un listener a chaque div de mon tableau qui appel maFonc()
+                        
+                }
+
+     }
+
+
+
+    </script>
+</body>
+</html>
